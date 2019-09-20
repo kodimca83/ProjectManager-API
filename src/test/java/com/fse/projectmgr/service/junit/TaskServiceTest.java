@@ -11,6 +11,7 @@ import java.util.Optional;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -20,6 +21,7 @@ import com.fse.projectmgr.model.ParentTask;
 import com.fse.projectmgr.model.Project;
 import com.fse.projectmgr.model.Task;
 import com.fse.projectmgr.model.User;
+import com.fse.projectmgr.repository.ParentTaskRepository;
 import com.fse.projectmgr.repository.ProjectRepository;
 import com.fse.projectmgr.repository.TaskRepository;
 import com.fse.projectmgr.repository.UserRepository;
@@ -116,33 +118,7 @@ public class TaskServiceTest {
 		assertNull("Task should be NULL", actual);
 		verify(this.mockTaskRepo).findById(taskIdToToFetch);
 	}
-	
-	@Test
-	public void testSaveTask_Save_Parent_Task() throws ParseException {
 		
-		Task testTaskToSave = new Task();
-		String parentTaskName = "Test Parent Task";
-		String projectName = "Project1";
-		
-		testTaskToSave.setTaskName("Test Task");
-		testTaskToSave.setParentTaskName(parentTaskName);
-		testTaskToSave.setProjectName(projectName);
-		
-		when(this.mockTaskRepo.findParentTask(parentTaskName))
-			.thenReturn(null);
-		when(this.mockTaskRepo.save(testTaskToSave))
-			.thenReturn(testTaskToSave);
-		when(this.mockProjectRepo.findProjectByName(projectName))
-			.thenReturn(getTestProject());
-		
-		this.taskService.saveTask(testTaskToSave, false);
-		
-		verify(this.mockTaskRepo).save(testTaskToSave);
-		verify(this.mockTaskRepo).findParentTask(parentTaskName);
-		
-		verify(this.mockProjectRepo).findProjectByName(projectName);
-	}
-	
 	@Test
 	public void testSaveTask() throws ParseException {
 		
